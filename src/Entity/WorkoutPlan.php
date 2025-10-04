@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\WorkoutPlanRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Enums\DayOfWeek;
+use App\Entity\Enums\DayOfWeek;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 

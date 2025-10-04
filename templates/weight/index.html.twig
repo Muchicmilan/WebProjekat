@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Unesite tezinu{% endblock %}
+
+{% block body %}
+    <h1>Unos kilaze</h1>
+    {{form_errors(weightForm)}}
+        {{form_row(weightForm.weight_kg)}}
+        <button type="submit" class="btn">Register</button>
+    {{form_end(weightForm)}}
+{% endblock %}

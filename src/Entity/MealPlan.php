@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Enums\DayOfWeek;
+use App\Entity\Enums\DayOfWeek;
 use App\Repository\MealPlanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

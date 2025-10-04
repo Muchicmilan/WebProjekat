@@ -6,12 +6,17 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Enums\UserRole;
+use App\Entity\Enums\UserRole;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+//Koristimo interfejsove iz symfony security-bundle, kako bi implementirali bezbednose metode
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -31,7 +36,7 @@ class User
     private ?string $password_hash = null;
 
     #[ORM\Column(type:"string", length:10, enumType: UserRole::class)]
-    private ?UserRole $role = null;
+    private ?UserRole $role=null;
 
     #[ORM\Column(type: TYPES::DECIMAL, precision:5, scale:2)]
     private ?string $height = null;
@@ -94,7 +99,7 @@ class User
         return $this;
     }
 
-    public function getPasswordHash(): ?string
+    public function getPassword(): ?string
     {
         return $this->password_hash;
     }
@@ -148,5 +153,28 @@ class User
             $plan->removeUser($this);
         }
         return $this;
+    }
+
+    public function getRoles(): array {
+        $role = $this->role->value;
+
+        $roles[] = 'ROLE_USER';
+
+        if($role) {
+            $roles[] = 'ROLE_' . strtoupper($role); //Symfony ocekuje roles formata ROLE_*naziv_role-a*
+        }
+        if(!$role) {
+            $roles[] = 'ROLE_GUEST';
+        }
+
+        return array_unique($roles);
+    }
+
+    public function eraseCredentials(): void {
+        return;
+    }
+
+    public function getUserIdentifier() : string {
+        return (string) $this->email;
     }
 }

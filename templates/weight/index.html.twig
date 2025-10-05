@@ -5,6 +5,7 @@
 {% block body %}
     <h1>Unos kilaze</h1>
     {{form_errors(weightForm)}}
+    {{form_start(weightForm)}}
         {{form_row(weightForm.weight_kg)}}
         <button type="submit" class="btn">Register</button>
     {{form_end(weightForm)}}

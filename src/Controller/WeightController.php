@@ -19,39 +19,42 @@ final class WeightController extends AbstractController
     #[Route('-first-register', 'app_weight_first_time')]
     public function weightRegister(Request $request,UserPasswordHasherInterface $userPasswordHasher ,EntityManagerInterface $entityManager): Response {
         $registrationData = $request->getSession()->get('registration_data');
+        $hashedPassword = $request->getSession()->get('hashed_password');
+
 
         if(!$registrationData) {
             $this->addFlash('warning', 'Molimo vas unesite prethodno vazne podatke');
             return $this->redirectToRoute('app_register');
         }
 
+
         $form = $this->createForm(WeightType::class);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $weightData = $form->getData();
 
+        if($form->isSubmitted() && $form->isValid()) {
+            $weightData = $form->getData()->getWeightKg();
+            
             $user = new User();
             $user->setEmail($registrationData['email']);
             $user->setName($registrationData['name']);
             $user->setSurname($registrationData['surname']);
             $user->setHeight($registrationData['height']);
-            $user->setRole(UserRole::GUEST);
-            $user->setPasswordHash($userPasswordHasher->hashPassword(
-                $user,
-                $registrationData['plainPassword']
-            ));
+            $user->setRole(UserRole::USER);
+            $user->setPassword($hashedPassword);
 
             $userStartProgress = new UserProgress();
             $userStartProgress->setUser($user);
-            $userStartProgress->setWeightKg($weightData['weight_kg']);
+            $userStartProgress->setWeightKg($weightData);
             $userStartProgress->setDate(new DateTime());
 
             $entityManager->persist($user);
             $entityManager->persist($userStartProgress);
             $entityManager->flush();
 
+
             $request->getSession()->remove('registration_data');
+            $request->getSession()->remove('hashed_password');
 
             return $this->redirectToRoute('app_homepage');
         }

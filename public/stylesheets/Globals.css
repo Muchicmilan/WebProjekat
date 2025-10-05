@@ -1,0 +1,35 @@
+@import url('./ColorPalette.css');
+@import url('./Buttons.css');
+@import url('./Cards.css');
+@import url('./Dashboard.css');
+@import url('./FlexGrid');
+@import url('ResponsiveCSS.css');
+@import url('Text.css');
+@import url('Hero.css');
+@import url('Footer.css');
+@import url('Header.css');
+@import url('RegisterForm.css');
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Inter", "Roboto", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header,
+main,
+footer {
+  padding: 1rem 2rem;
+}
+
+main {
+  flex: 1;
+  padding: 2rem;
+}

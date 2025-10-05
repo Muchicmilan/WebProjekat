@@ -1,20 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MainController!{% endblock %}
+{% block title %}Fast2Fit{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<header class="header">
+    <div class="header-left">
+        <div class="logo">Fast2Fit</div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <nav class="header-nav">
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="/users">Korisnici</a>
+            <a href="/create-plan">Kreiraj Plan</a>
+        {% elseif is_granted('ROLE_TRAINER') %}
+            <a href="/assign-plan">Dodaj plan korisniku</a>
+            <a href="/create-plan">Kreiraj Plan</a>
+        {% else %}
+            <a href="/update-progress">Ažurirajte promene</a>
+            <a href="/plan">Vaš dijetalni i trening plan</a>
+        {% endif %}
+        </nav>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/wamp64/www/ProjekatZaWeb/Milan_Mucic_524/src/Controller/MainController.php</code></li>
-        <li>Your template at <code>C:/wamp64/www/ProjekatZaWeb/Milan_Mucic_524/templates/main/index.html.twig</code></li>
-    </ul>
-</div>
+    <div class="header-right">
+        {% if app.user %}
+            <a href="/logout" class="btn btn-outline">Log Out</a>
+        {% else %}
+            <a href="{{ path('app_register')}}" class="btn btn-outline">Register</a>
+        {% endif %}
+    </div>
+</header>
 {% endblock %}

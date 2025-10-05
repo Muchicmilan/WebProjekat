@@ -29,11 +29,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 40)]
     private ?string $surname = null;
 
-    #[ORM\Column(length: 70)]
+    #[ORM\Column(length: 70, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $password_hash = null;
+    private ?string $password = null;
 
     #[ORM\Column(type:"string", length:10, enumType: UserRole::class)]
     private ?UserRole $role=null;
@@ -101,12 +101,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getPassword(): ?string
     {
-        return $this->password_hash;
+        return $this->password;
     }
 
-    public function setPasswordHash(string $password_hash): static
+    public function setPassword(string $password_hash): static
     {
-        $this->password_hash = $password_hash;
+        $this->password = $password_hash;
 
         return $this;
     }
@@ -156,16 +156,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function getRoles(): array {
-        $role = $this->role->value;
+        $roles = ['ROLE_USER'];
 
-        $roles[] = 'ROLE_USER';
-
-        if($role) {
-            $roles[] = 'ROLE_' . strtoupper($role); //Symfony ocekuje roles formata ROLE_*naziv_role-a*
-        }
-        if(!$role) {
-            $roles[] = 'ROLE_GUEST';
-        }
+        if($this->role !== null)
+            $roles[] = 'ROLE_' . strtoupper($this->role->value);
 
         return array_unique($roles);
     }
@@ -177,4 +171,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier() : string {
         return (string) $this->email;
     }
+
 }

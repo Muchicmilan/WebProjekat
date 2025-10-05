@@ -6,6 +6,7 @@ use App\Entity\User;
 //use Composer\Pcre\Regex;
 //use Doctrine\DBAL\Types\DecimalType;
 //use Doctrine\DBAL\Types\TextType;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -68,14 +69,6 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ]
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
@@ -115,6 +108,8 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             //'data_class' => User::class,
+
         ]);
+
     }
 }

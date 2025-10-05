@@ -1,0 +1,18 @@
+.hero {
+  background: linear-gradient(135deg, var(--color-bg-alt), #0d1b2a);
+  padding: 3rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+}
+.hero h1 {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+}
+.hero p {
+  color: var(--color-text-muted);
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+.hero .btn {
+  margin-top: 2rem;
+}

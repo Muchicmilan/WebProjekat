@@ -7,12 +7,17 @@
                 {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('app_all_users') }}">Korisnici</a>
                     <a href="{{ path('app_plans_view') }}">Upravljaj Planovima</a>
+                    <a href="{{ path('app_inbox') }}">Poruke Korisnika</a>
                 {% elseif is_granted('ROLE_TRAINER') %}
                     <a href="{{ path('app_users_trainer_view') }}">Pregled korisnika</a>
                     <a href="{{ path('app_plans_view') }}">Upravljaj Planovima</a>
+                    <a href="{{ path('app_inbox') }}">Poruke Korisnika</a>
                 {% else %}
                     <a href="{{ path('app_pers_prog_view')}}">Moj Napredak</a>
                     <a href="{{ path('app_user_plans')}}">Moji Planovi</a>
+                    <a href="{{ path('app_send_msg') }}">Pošalji Poruku</a>
+                    <a href="{{ path('app_user_sent_msg') }}">Poslate Poruke</a>
+                    <a href="{{ path('app_usr_inbox') }}">Primljene Poruke</a>
                 {% endif %}
             </nav>
         {% endif %}

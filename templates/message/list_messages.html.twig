@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block body %}
+    <div class="content" style="padding: 0;">
+        <h2 class="auth-title" style="text-align: left; margin-bottom: 2rem;">{{ page_title }}</h2>
+
+        {% if messages is not empty %}
+            {% for message in messages %}
+                <details class="day-accordion">
+                    <summary>
+                        <div class="flex-between">
+                            <span>
+                                {% if page_title == 'Primljene Poruke' %}
+                                    <strong>Od:</strong> {{ message.sender.name }} {{ message.sender.surname }}
+                                    <span class="text-muted">({{ message.sender.email }})</span>
+                                {% else %}
+                                    <strong>Za:</strong> {{ message.receiver.name }} {{ message.receiver.surname }}
+                                    <span class="text-muted">({{ message.receiver.email }})</span>
+                                {% endif %}
+                            </span>
+                            <span class="text-muted">
+                                {{ message.dateSent|date('d.m.Y') }} u {{ message.timeSent|date('H:i') }}
+                            </span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <p style="white-space: pre-wrap; color: var(--color-text);">{{ message.content }}<br>
+                        </p>
+                        <div class="message-actions" style="text-align: right; border-top: 1px solid var(--color-border); padding-top: 1rem;">
+                            <a class="btn btn-outline btn-sm" href="{{ path('app_trainer_response', {'id' : message.sender.id}) }}">
+                                 Odgovori
+                            </a>
+                        </div>
+                    </div>
+                </details>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state-card">
+                <p>Trenutno nema poruka za prikaz.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

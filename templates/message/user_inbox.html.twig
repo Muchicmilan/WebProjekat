@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block body %}
+    <div class="content" style="padding: 0;">
+        <h2 class="auth-title" style="text-align: left; margin-bottom: 2rem;">Inbox</h2>
+
+        {% if messages is not empty %}
+            {% for message in messages %}
+                <details class="day-accordion" open>
+                    <summary>
+                        <div class="flex-between">
+                            <span>
+                                <strong>Od:</strong> {{ message.sender.name }} {{ message.sender.surname }}
+                                <span class="text-muted">({{ message.sender.email }})</span>
+                            </span>
+                            <span class="text-muted">
+                                {{ message.dateSent|date('d.m.Y') }} u {{ message.timeSent|date('H:i') }}
+                            </span>
+                        </div>
+                    </summary>
+                    <div class="accordion-content">
+                        <p style="white-space: pre-wrap; color: var(--color-text); margin-bottom: 1.5rem;">
+                            {{ message.content }}
+                        </p>
+                        
+                        <div class="message-actions" style="text-align: right; border-top: 1px solid var(--color-border); padding-top: 1rem;">
+                            <a class="btn btn-outline btn-sm" href="{{ path('app_message_send', {'replyTo': message.sender.email}) }}">
+                                 Odgovori
+                            </a>
+                        </div>
+                    </div>
+                </details>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state-card">
+                <p>Nemate primljenih poruka.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

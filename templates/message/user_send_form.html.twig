@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %} {# Pretpostavka da imate base.html.twig #}
+
+{% block title %}Pošalji Poruku{% endblock %}
+
+{% block body %}
+<div class="form-card">
+    <h2 class="form-title">Pošalji poruku treneru</h2>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }}" style="padding: 1rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid;
+                {% if label == 'success' %} border-color: #00b4d8; background-color: rgba(0, 180, 216, 0.1); color: #00b4d8;
+                {% else %} border-color: #ff4c4c; background-color: rgba(255, 60, 60, 0.1); color: #ff4c4c; {% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(messageForm, {'attr': {'class': 'auth-form'}}) }}
+
+        <div class="form-group">
+            {{ form_label(messageForm.email, 'Email primaoca (trenera)') }}
+            {{ form_widget(messageForm.email) }}
+            {{ form_errors(messageForm.email) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(messageForm.content, 'Vaša poruka') }}
+            {{ form_widget(messageForm.content, {'attr': {'rows': 6}}) }}
+            {{ form_errors(messageForm.content) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-2">Pošalji</button>
+
+    {{ form_end(messageForm) }}
+</div>
+{% endblock %}

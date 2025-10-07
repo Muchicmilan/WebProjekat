@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Plan;
 use App\Form\PlanType;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 //Klasa bazirana na write funkcije vezano za planove
 class MainPlanController extends AbstractController{
+
+    private $logger;
+
+    public function __construct(LoggerInterface $li) {
+        $this->logger = $li;
+    }
+
     #[Route('/manage-plans/create-main-plan', name:'app_plan_create')]
     #[IsGranted(
         new Expression(
@@ -20,12 +28,19 @@ class MainPlanController extends AbstractController{
         )
     )]
     public function createMainPlan(EntityManagerInterface $em, Request $req) {
+        /**
+         * @var \App\Entity\User $user
+         */
+        $user = $this->getUser();
+        $this->logger->info($user->getRole()->value . ' ' . $user->getName() .' '. $user->getSurname() .
+         " Pokusava da kreira glavni plan");
         $plan = new Plan();
         $form = $this->createForm(PlanType::class, $plan);
         $form->handleRequest($req);
         if($form->isSubmitted() && $form->isValid()) {
             $em->persist($plan);
             $em->flush();
+        $this->logger->info($plan->getPlanName() . " sa id-em: " . $plan->getId() . " Je uspesno kreiran");
 
             return $this->redirectToRoute('app_plans_view');
         }
@@ -41,12 +56,20 @@ class MainPlanController extends AbstractController{
         )
     )]
     public function deletePlan(Plan $plan, Request $req, EntityManagerInterface $em) {
+        /**
+         * @var \App\Entity\User $user
+         */
+        $user = $this->getUser();
+        $this->logger->info($user->getRole()->value . ' ' . $user->getName() .' '. $user->getSurname() .
+         " Pokusava da obrise plan sa id-em: ". $plan->getId());
         if($this->isCsrfTokenValid('delete'.$plan->getId(), $req->request->get('_token'))) {
             $em->remove($plan);
             $em->flush();
-
-            $this->addFlash('success', "Uspesno obrisan plan");
+            $this->logger->info('Plan uspesno obrisan');
+            $this->addFlash('success', "Uspesno obrisan plan sa id-em " . $plan->getId());
         } else {
+            $this->logger->error('Neuspelo brisanje plana sa id-em: '. $plan->getId() . " razlog: nevalidan csrf token");
+
             $this->addFlash('error', 'Nevalidan csrf token');
         }
         return $this->redirectToRoute('app_plans_view');

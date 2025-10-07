@@ -66,7 +66,7 @@ class MealPlan
         return $this->plan;
     }
 
-    public function setPlan(Plan $plan):static {
+    public function setPlan(?Plan $plan):static {
         $this->plan = $plan;
         return $this;
     }

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block title %}Dodaj obroke{% endblock %}
+
+{% block body %}
+<div class="form-card">
+    <h1 class="form-title">Dodaj obroke za <span style="color: var(--color-accent);">{{ day|capitalize }}</span></h1>
+    <p class="text-muted text-center" style="margin-top: -1.5rem; margin-bottom: 2rem;">
+        Glavni plan: <strong>{{ plan.planName }}</strong>
+    </p>
+
+    {{ form_start(mealPlanForm, {'attr': {'novalidate': 'novalidate', 'class': 'auth-form'}}) }}
+        <div class="form-group">
+            <label>{{ form_label(mealPlanForm.meals) }}</label>
+
+            <div class="checkbox-list-container">
+                {% for meal_choice in mealPlanForm.meals %}
+                    <div class="checkbox-grid-item">
+                        {{ form_widget(meal_choice) }}
+                        {{ form_label(meal_choice) }}
+                    </div>
+                {% endfor %}
+            </div>
+            
+            {{ form_errors(mealPlanForm.meals) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-2">Sačuvaj plan ishrane</button>
+
+    {{ form_end(mealPlanForm) }}
+
+    <div class="text-center mt-3">
+        <a href="{{ path('app_plans_meal', {
+                'return_url': path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))
+            }) }}" class="text-muted" style="text-decoration: none;"> Dodaj novi obrok &rarr;</a>
+        <br><br>
+        <a href="{{ path('app_plan_view', {'id': plan.id}) }}" class="text-muted" style="text-decoration: none;">&larr; Odustani i vrati se na pregled plana</a>
+    </div>
+</div>
+{% endblock %}

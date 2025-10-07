@@ -34,9 +34,13 @@
       </div>
 
       <div class="form-group">
-        {{ form_label(registrationForm.plainPassword) }}
+        {{ form_label(registrationForm.plainPassword, 'Password') }}
         {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-input'}}) }}
         {{ form_errors(registrationForm.plainPassword) }}
+      </div>
+
+      <div class="form-group-alt">
+        <p>Vec imas nalog? <a href="{{path('app_login')}}">Klikni ovde</a></p>
       </div>
 
       <button type="submit" class="btn btn-primary w-100 mt-2">Registruj se</button>

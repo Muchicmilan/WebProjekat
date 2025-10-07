@@ -1,0 +1,27 @@
+.day-badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.day-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  border: 1px solid var(--color-border);
+  
+  background-color: transparent;
+  color: var(--color-text-muted);
+}
+
+.day-badge.active {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 0 8px rgba(0, 180, 216, 0.4);
+}

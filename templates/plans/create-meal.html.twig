@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Meal{% endblock %}
+
+{% block body %}
+<div class="form-card">
+    <h1 class="form-title">Create a New Meal</h1>
+
+    {{ form_start(mealForm, {'attr': {'novalidate': 'novalidate', 'class': 'auth-form'}}) }}
+        {% if return_url is defined and return_url %}
+            <input type="hidden" name="return_url" value="{{ return_url }}">
+        {% endif %}
+        <div class="form-group">
+            {{ form_label(mealForm.name, 'Naziv obroka') }}
+            {{ form_widget(mealForm.name) }}
+            {{ form_errors(mealForm.name) }}
+        </div>
+
+        <div class="grid grid-2">
+            <div class="form-group">
+                {{ form_label(mealForm.protein_g, 'Protein (g)') }}
+                {{ form_widget(mealForm.protein_g) }}
+                {{ form_errors(mealForm.protein_g) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(mealForm.carbs_g, 'Ugljeni Hidrati (g)') }}
+                {{ form_widget(mealForm.carbs_g) }}
+                {{ form_errors(mealForm.carbs_g) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(mealForm.calories_kcal, 'Kalorije (kcal)') }}
+                {{ form_widget(mealForm.calories_kcal) }}
+                {{ form_errors(mealForm.calories_kcal) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(mealForm.fat_g, 'Mast (g)') }}
+                {{ form_widget(mealForm.fat_g) }}
+                {{ form_errors(mealForm.fat_g) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(mealForm.recipe, 'Recept') }}
+            {{ form_widget(mealForm.recipe, {'attr': {'rows': 6}}) }}
+            {{ form_errors(mealForm.recipe) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-2">Kreiraj obrok</button>
+
+    {{ form_end(mealForm) }}
+</div>
+{% endblock %}

@@ -45,9 +45,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: 'user_plan')]
     private Collection $plans;
 
+    #[ORM\OneToMany(targetEntity: UserProgress::class, mappedBy:'users', cascade:['persist', 'remove'], orphanRemoval:true)]
+    private Collection $userProgress;
     public function __construct()
     {
         $this->plans = new ArrayCollection();
+        $this->userProgress = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,6 +173,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier() : string {
         return (string) $this->email;
+    }
+
+    public function getUserProgress(): Collection
+    {
+        return $this->userProgress;
+    }
+
+    public function addUserProgress(UserProgress $userProgress): self
+    {
+        if (!$this->userProgress->contains($userProgress)) {
+            $this->userProgress->add($userProgress);
+            $userProgress->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeUserProgress(UserProgress $userProgress): self
+    {
+        $this->userProgress->removeElement($userProgress);
+        return $this;
     }
 
 }

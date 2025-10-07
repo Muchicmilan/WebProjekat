@@ -2,13 +2,21 @@
 @import url('./Buttons.css');
 @import url('./Cards.css');
 @import url('./Dashboard.css');
-@import url('./FlexGrid');
+@import url('./FlexGrid.css');
 @import url('ResponsiveCSS.css');
 @import url('Text.css');
 @import url('Hero.css');
 @import url('Footer.css');
 @import url('Header.css');
 @import url('RegisterForm.css');
+@import url('LoginForm.css');
+@import url('Checkbox.css');
+@import url('Tables.css');
+@import url('WorkoutForm.css');
+@import url('PlanForms.css');
+@import url('DayCards.css');
+@import url('DayBadges.css');
+@import url('Profile.css');
 * {
   box-sizing: border-box;
   margin: 0;
@@ -32,4 +40,24 @@ footer {
 main {
   flex: 1;
   padding: 2rem;
+}
+/*Form errori*/
+.form-group ul {
+  list-style: none;
+  margin: 0.4rem 0 0 0;
+  padding: 0;
+}
+
+.form-group li {
+  background-color: rgba(255, 60, 60, 0.1);
+  color: #ff4c4c;
+  border-left: 3px solid #ff4c4c;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+a {
+  text-decoration: none;
 }

@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil: {{ user.name }} {{ user.surname }}{% endblock %}
+
+{% block body %}
+<div class="profile-container">
+
+    <div class="flex-between" style="align-items: flex-start; margin-bottom: 2rem;">
+        <div>
+            <h1 class="auth-title" style="margin-bottom: 0.2rem;">{{ user.name }} {{ user.surname }}</h1>
+            <p class="text-muted">{{ user.email }}</p>
+        </div>
+        <a href="{{ path('app_users_trainer_view') }}" class="btn btn-outline">Nazad na listu korisnika</a>
+    </div>
+
+    <div class="profile-grid">
+
+        <div class="card profile-details-card">
+            <h3>Lični podaci</h3>
+            <dl class="mt-2">
+                <dt>Ime i Prezime</dt>
+                <dd>{{ user.name }} {{ user.surname }}</dd>
+
+                <dt>Email</dt>
+                <dd>{{ user.email }}</dd>
+
+                <dt>Visina</dt>
+                <dd>{{ user.height ? user.height ~ ' cm' : 'Nije uneto' }}</dd>
+
+                <dt>Uloga</dt>
+                <dd>{{ user.role.value|capitalize }}</dd>
+            </dl>
+        </div>
+        <div class="card">
+            <div class="flex-between">
+                <h3>Napredak</h3>
+            </div>
+            <div class="table-container" style="margin-top: 1rem; padding: 0; box-shadow: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Težina (kg)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in progress|sort((a, b) => b.date <=> a.date) %}
+                            <tr>
+                                <td>{{ entry.date|date('d.m.Y.') }}</td>
+                                <td>{{ entry.weightKg }} kg</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="2" class="text-center text-muted">Korisnik još uvek nije uneo napredak.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="flex-between">
+            <h3>Dodeljeni planovi</h3>
+            {% if ( is_granted('ROLE_TRAINER') or is_granted('ROLE_ADMIN') )%}
+            <a href="{{ path('app_assign_plan', {'id' : user.id})}}" class="btn btn-primary">Dodeli plan</a>
+            {% endif %}
+        </div>
+        <div class="plan-list">
+            {% for plan in user.plans %}
+                <a href="{{ path('app_plan_view', {'id': plan.id}) }}" class="plan-badge">
+                    {{ plan.planName }}
+                </a>
+            {% else %}
+                <p class="text-muted">Korisniku nije dodeljen nijedan plan.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

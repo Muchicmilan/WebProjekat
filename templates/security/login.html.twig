@@ -1,34 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Prijava | Fast2Fit{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<section class="auth-section">
+    <div class="auth-card">
+        <h1 class="auth-title">Prijavi se</h1>
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
+        {% if error %}
+            <div class="form-errors">
+                <ul><li>{{ error.messageKey|trans(error.messageData, 'security') }}</li></ul>
+            </div>
+        {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+        {% if app.user %}
+            <div class="form-group-alt">
+                <p>Ulogovani ste kao <strong>{{ app.user.userIdentifier }}</strong>.  
+                <a href="{{ path('app_logout') }}">Odjavi se</a></p>
+            </div>
+        {% else %}
+            <form method="post" class="auth-form">
 
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
+                <div class="form-group">
+                    <label for="inputEmail">Email</label>
+                    <input 
+                        type="email" 
+                        value="{{ last_username }}" 
+                        name="email" 
+                        id="inputEmail" 
+                        class="form-input" 
+                        autocomplete="email" 
+                        required 
+                        autofocus
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="inputPassword">Lozinka</label>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="inputPassword" 
+                        class="form-input" 
+                        autocomplete="current-password" 
+                        required
+                    >
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="checkbox-container">
+                    <label class="switch">
+                        <input type="checkbox" name="_remember_me">
+                        <span class="slider"></span>
+                        <span class="label-text"> Zapamti me </span>
+                    </label>
+                </div>
+
+                <button class="btn btn-primary w-100 mt-2" type="submit">Prijavi se</button>
+
+                <div class="form-group-alt">
+                    <p>Nemaš nalog? <a href="{{ path('app_register') }}">Registruj se</a></p>
+                </div>
+            </form>
+        {% endif %}
     </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+</section>
 {% endblock %}

@@ -1,0 +1,32 @@
+<header>
+    <div class="header-left">
+        <a href="{{ path('app_homepage') }}" class="logo">Fast2Fit</a>
+
+        {% if app.user %}
+            <nav>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_all_users') }}">Korisnici</a>
+                    <a href="{{ path('app_plans_view') }}">Upravljaj Planovima</a>
+                {% elseif is_granted('ROLE_TRAINER') %}
+                    <a href="{{ path('app_users_trainer_view') }}">Pregled korisnika</a>
+                    <a href="{{ path('app_plans_view') }}">Upravljaj Planovima</a>
+                {% else %}
+                    <a href="#">Moj Napredak</a>
+                    <a href="#">Moji Planovi</a>
+                {% endif %}
+            </nav>
+        {% endif %}
+    </div>
+
+    <div class="header-right">
+        {% if app.user %}
+            <span class="text-muted" style="margin-right: 1rem;">
+                Zdravo, {{ app.user.name }}
+            </span>
+            <a href="{{ path('app_logout') }}" class="btn btn-outline">Odjavi se</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="btn">Prijavi se</a>
+            <a href="{{ path('app_register') }}" class="btn btn-primary">Registruj se</a>
+        {% endif %}
+    </div>
+</header>

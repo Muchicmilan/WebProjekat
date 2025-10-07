@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+{% block title  %} Korisnici {% endblock title %}
+{% block body %}
+{% if is_granted('ROLE_ADMIN') %}
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Ime</th>
+                <th>Prezime</th>
+                <th>E-mail</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+            {% for user in all_users %}
+                <tr>
+                    <td>{{user.name}}</td>
+                    <td>{{user.surname}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.role.value}}</td>
+                    <td>
+                        <div class="table-actions">
+                            <form method="post"
+                            action="{{ path('app_delete_user', {'id': user.id}) }}"
+                            onsubmit="return confirm('Da li ste sigurni da zelite da obrisete korisnika sa emailom {{user.email}}');"
+                            >
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                <button class="btn btn-delete">Obrisi</button>
+                            </form>
+                            {% if user.role.value == 'user' %}
+                            <form method="post"
+                            action="{{ path('app_promote_role', {'id': user.id}) }}"
+                            onsubmit="return confirm('Da li ste sigurni da zelite povecati poziciju korisnika sa e-mailom: {{user.email}}');"
+                            >
+                                <input type="hidden" name="_token" value="{{ csrf_token('promote' ~ user.id) }}">
+                                <button class="btn btn-edit">Promovisi</button>
+                            </form>
+                            {% else %}
+                            <form method="post"
+                            action="{{ path('app_demote_role', {'id': user.id}) }}"
+                            onsubmit="return confirm('Da li ste sigurni da zelite smanjiti poziciju korisnika sa e-mailom: {{user.email}}');"
+                            >
+                                <input type="hidden" name="_token" value="{{ csrf_token('demote' ~ user.id) }}">
+                                <button class="btn btn-edit">Degradisi</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Nema korisnika za prikaz</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% else %}
+<section class="auth-section">
+    <div class="auth-card">
+        <h3 class="auth-title">Ups izgleda da ste na pogresnoj stranici!</h3>
+        Kliknite ovde -><a href="{{path('app_homepage')}}" class="redirect-text">Pocetna stranica</a>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

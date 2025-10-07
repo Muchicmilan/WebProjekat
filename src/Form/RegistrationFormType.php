@@ -98,6 +98,9 @@ class RegistrationFormType extends AbstractType
                     new LessThanOrEqual([
                         'value' => 999.99,
                         'message' => 'Visina ne sme biti veca od 999.99'
+                    ]),
+                    new NotBlank([
+                        'message' => 'Unesite visinu!'
                     ])
                 ]
             ]);

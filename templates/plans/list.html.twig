@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Planovi{% endblock title %}
+
+{% block body %}
+{% if is_granted('ROLE_TRAINER') or is_granted('ROLE_ADMIN') %}
+
+    <div class="flex-between" style="margin-bottom: 1.5rem; align-items: center;">
+        <h1 class="auth-title" style="margin-bottom: 0;">Svi planovi</h1>
+        <a href="{{ path('app_plan_create') }}" class="btn btn-primary">Kreiraj novi plan</a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Plan Name</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in allPlans %}
+                    <tr>
+                        <td>{{ plan.planName }}</td>
+                        <td>{{ plan.notes ? (plan.notes|slice(0, 70) ~ (plan.notes|length > 70 ? '...' : '')) : 'N/A' }}</td>
+                        <td>
+                            <div class="table-actions">
+                               <a style="text-decoration: none" href="{{ path('app_plan_view', {'id': plan.id}) }}" class="btn btn-outline">
+                                    Pregled
+                                </a>
+                                <form method="post"
+                                action="{{ path('app_plan_delete', {'id': plan.id}) }}"
+                                onsubmit="return confirm('Da li ste sigurni da želite da obrišete ovaj plan?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ plan.id) }}">
+                                    <button class="btn btn-delete">Obriši</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">Nema jos planova.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% else %}
+    <section class="auth-section">
+        <div class="auth-card">
+            <h3 class="auth-title">Oops! It seems you are on the wrong page!</h3>
+            Click here -> <a href="{{ path('app_homepage') }}" class="redirect-text">Homepage</a>
+        </div>
+    </section>
+{% endif %}
+{% endblock %}

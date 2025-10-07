@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block title  %} Korisnici {% endblock title %}
+{% block body %}
+{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TRAINER') %}
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Ime</th>
+                <th>Prezime</th>
+                <th>E-mail</th>
+                <th>Actions</th>
+            </tr>
+            {% for user in all_users %}
+                <tr>
+                    <td>{{user.name}}</td>
+                    <td>{{user.surname}}</td>
+                    <td>{{user.email}}</td>
+                    <td>
+                        <div class="table-actions">
+                            <a style="text-decoration:none" href="{{ path('app_user_profile', {'id': user.id}) }}" class="btn btn-edit">Profil</a>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Nema korisnika za prikaz</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% else %}
+<section class="auth-section">
+    <div class="auth-card">
+        <h3 class="auth-title">Ups izgleda da ste na pogresnoj stranici!</h3>
+        Kliknite ovde -><a href="{{path('app_homepage')}}" class="redirect-text">Pocetna stranica</a>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

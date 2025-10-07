@@ -16,28 +16,17 @@ class PlanRepository extends ServiceEntityRepository
         parent::__construct($registry, Plan::class);
     }
 
-    //    /**
-    //     * @return Plan[] Returns an array of Plan objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    //Kako bi sprecili lazy loading i videli sve planove potrebno je napraviti sopstven query
 
-    //    public function findOneBySomeField($value): ?Plan
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findWithDetails(int $id) {
+                return $this->createQueryBuilder('p')
+            ->leftJoin('p.workoutPlans', 'wp')
+            ->addSelect('wp')   
+            ->leftJoin('p.mealPlans', 'mp')
+            ->addSelect('mp') 
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

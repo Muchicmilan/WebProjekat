@@ -1,0 +1,88 @@
+.table-container {
+  width: 100%;
+  overflow-x:hidden;
+  margin-top: 2rem;
+  border-radius: 10px;
+  background-color: #111;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  padding: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #ddd;
+  font-size: 0.95rem;
+  min-width: 600px;
+}
+
+th, td {
+  padding: 0.9rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #222;
+}
+
+th {
+  color: var(--color-primary);
+  font-weight: 600;
+  background-color: #0f0f0f;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+tr:hover {
+  background-color: rgba(97, 160, 255, 0.08);
+  transition: background-color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  table {
+    font-size: 0.9rem;
+    min-width: unset;
+  }
+
+  th, td {
+    padding: 0.7rem;
+  }
+}
+
+tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table-actions .btn {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+
+.table-actions .btn-edit {
+  background-color: #1f4fff;
+  color: white;
+}
+
+.table-actions .btn-delete {
+  background-color: #ff3b3b;
+  color: white;
+}
+
+.btn-delete {
+  background-color: #ff3b3b;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #ff5959;
+}
+
+.table-actions .btn-edit:hover {
+  background-color: #3b68ff;
+}
+
+.table-actions .btn-delete:hover {
+  background-color: #ff5959;
+}

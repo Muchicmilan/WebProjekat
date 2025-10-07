@@ -3,10 +3,17 @@
 {% block title %}Unesite tezinu{% endblock %}
 
 {% block body %}
-    <h1>Unos kilaze</h1>
-    {{form_errors(weightForm)}}
-    {{form_start(weightForm)}}
-        {{form_row(weightForm.weight_kg)}}
-        <button type="submit" class="btn">Register</button>
-    {{form_end(weightForm)}}
+    <section class="auth-section">
+        <div class="auth-card">
+            <h1>Unesite detalje</h1>
+            {{form_start(weightForm, {'attr' : {'class' : 'auth-form'}}) }}
+                <div class="form-group">
+                    {{ form_label(weightForm.weight_kg, 'Vasa kilaza') }}
+                    {{ form_widget(weightForm.weight_kg, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(weightForm.weight_kg) }}
+                </div>
+            <button type="submit" class="btn btn-primary w-100 mt-2">Zavrsi</button>
+            {{form_end(weightForm)}}
+        </div>
+    </section>
 {% endblock %}

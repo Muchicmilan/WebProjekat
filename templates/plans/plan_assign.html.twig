@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dodeli plan korisniku: {{ user.name }}{% endblock %}
+
+{% block body %}
+<div class="form-card">
+    <h1 class="form-title">Dodeli plan korisniku <span style="color: var(--color-accent);">{{ user.name }} {{ user.surname }}</span></h1>
+
+    {{ form_start(plansForm, {'class': 'auth-form'}) }}
+        <div class="form-group">
+            <div class="checkbox-list-container">
+                {% for plan_choice in plansForm.plans %}
+                    <div class="checkbox-grid-item">
+                        {{ form_widget(plan_choice) }}
+                        {{ form_label(plan_choice) }}
+                    </div>
+                {% endfor %}
+            </div>
+            {{ form_errors(plansForm.plans) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-2">Sačuvaj izmene</button>
+    {{ form_end(plansForm) }}
+
+    <div class="text-center mt-3">
+        <a href="{{ path('app_user_profile', {'id': user.id}) }}" class="text-muted" style="text-decoration: none;">&larr; Odustani i vrati se na profil</a>
+    </div>
+</div>
+{% endblock %}

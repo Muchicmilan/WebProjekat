@@ -1,32 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Fast2Fit{% endblock %}
+{% block title %}Fast2Fit - Vaš put do zdravijeg života{% endblock %}
 
 {% block body %}
-<header class="header">
-    <div class="header-left">
-        <div class="logo">Fast2Fit</div>
-
-        <nav class="header-nav">
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="/users">Korisnici</a>
-            <a href="/create-plan">Kreiraj Plan</a>
-        {% elseif is_granted('ROLE_TRAINER') %}
-            <a href="/assign-plan">Dodaj plan korisniku</a>
-            <a href="/create-plan">Kreiraj Plan</a>
-        {% else %}
-            <a href="/update-progress">Ažurirajte promene</a>
-            <a href="/plan">Vaš dijetalni i trening plan</a>
-        {% endif %}
-        </nav>
-    </div>
-
-    <div class="header-right">
+    <div class="hero">
+        <h1>Dobrodošli u Fast2Fit</h1>
+        <p>Vaš lični partner za planiranje treninga i ishrane. Postignite svoje ciljeve uz nas!</p>
+        
         {% if app.user %}
-            <a href="/logout" class="btn btn-outline">Log Out</a>
+            <a href="#" class="btn btn-primary">Moja Kontrolna Tabla</a>
         {% else %}
-            <a href="{{ path('app_register')}}" class="btn btn-outline">Register</a>
+            <a href="{{ path('app_register') }}" class="btn btn-primary">Započnite Odmah</a>
         {% endif %}
     </div>
-</header>
+
+    <div class="features-section" style="padding: 3rem 0;">
+        <h2 class="text-center auth-title">Naše Mogućnosti</h2>
+        <div class="grid grid-3 mt-3">
+            <div class="card text-center">
+                <h3>Personalizovani Planovi</h3>
+                <p>Kreirajte i dodelite detaljne planove treninga i ishrane za svakog klijenta.</p>
+            </div>
+            <div class="card text-center">
+                <h3>Praćenje Napretka</h3>
+                <p>Lako pratite težinu i druge metrike vaših klijenata kroz vreme.</p>
+            </div>
+            <div class="card text-center">
+                <h3>Jednostavno za Korišćenje</h3>
+                <p>Intuitivan interfejs dizajniran za trenere i njihove klijente.</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

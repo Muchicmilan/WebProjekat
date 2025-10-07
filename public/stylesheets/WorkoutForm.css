@@ -1,0 +1,117 @@
+.form-card {
+  background: var(--color-bg-alt);
+  padding: 2rem 2.5rem;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  margin: 2rem auto;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.form-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.auth-form textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.25s ease;
+  outline: none;
+  font-family: inherit;
+  min-height: 120px;
+  resize: vertical;
+}
+
+.auth-form textarea:focus {
+  border-color: var(--color-primary);
+  background: var(--color-bg-alt);
+  box-shadow: 0 0 10px rgba(26, 115, 232, 0.4);
+}
+
+.checkbox-list-container {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.checkbox-grid-item {
+  display: block;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.checkbox-grid-item:hover {
+  border-color: var(--color-primary);
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.checkbox-grid-item input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-grid-item label {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  width: 100%;
+  height: 100%;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-grid-item label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #555;
+  background-color: #222;
+  border-radius: 5px;
+  margin-right: 12px;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.checkbox-grid-item input:checked + label {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.checkbox-grid-item input:checked + label::before {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.checkbox-grid-item input:focus-visible + label {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 6px;
+}

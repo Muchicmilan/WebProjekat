@@ -28,7 +28,7 @@ class Workout
     #[ORM\Column(type: Types::TEXT)]
     private ?string $notes = null;
 
-    #[ORM\ManyToMany(targetEntity: WorkoutPlan::class, mappedBy:"workouts")]
+    #[ORM\ManyToMany(targetEntity: WorkoutPlan::class, mappedBy:"workouts", cascade: ['persist'])]
     private Collection $workoutPlans;
 
         public function __construct() {

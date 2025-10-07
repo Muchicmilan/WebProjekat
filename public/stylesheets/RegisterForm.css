@@ -33,7 +33,8 @@
 
 .form-input input,
 .form-input select,
-.auth-form input {
+.auth-form input,
+.auth-form select {
   width: 100%;
   padding: 0.8rem 1rem;
   background: var(--color-bg);
@@ -46,7 +47,8 @@
 }
 
 .form-input input:focus,
-.auth-form input:focus {
+.auth-form input:focus,
+.auth-form select:focus {
   border-color: var(--color-primary);
   background: var(--color-bg-alt);
   box-shadow: 0 0 10px rgba(26, 115, 232, 0.4);
@@ -58,12 +60,6 @@
   font-size: 0.9rem;
   margin-bottom: 0.4rem;
   letter-spacing: 0.3px;
-}
-
-.checkbox {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .btn-primary {

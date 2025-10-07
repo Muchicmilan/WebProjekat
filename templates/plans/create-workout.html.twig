@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kreiraj Novu Vežbu{% endblock %}
+
+{% block body %}
+<div class="form-card">
+    <h1 class="form-title">Kreiraj Novu Vežbu</h1>
+
+    {{ form_start(workoutForm, {'attr': {'class': 'auth-form', 'novalidate': 'novalidate'}}) }}
+        {% if return_url is defined and return_url %}
+            <input type="hidden" name="return_url" value="{{ return_url }}">
+        {% endif %}
+        <div class="form-group">
+            {{ form_label(workoutForm.name) }}
+            {{ form_widget(workoutForm.name, {'attr': {'placeholder': 'Npr. Bench Press'}}) }}
+            {{ form_errors(workoutForm.name) }}
+        </div>
+
+        <div class="grid grid-2">
+            <div class="form-group">
+                {{ form_label(workoutForm.sets) }}
+                {{ form_widget(workoutForm.sets, {'attr': {'placeholder': 'Npr. 4'}}) }}
+                {{ form_errors(workoutForm.sets) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(workoutForm.reps) }}
+                {{ form_widget(workoutForm.reps, {'attr': {'placeholder': 'Npr. 12'}}) }}
+                {{ form_errors(workoutForm.reps) }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_label(workoutForm.notes, 'Dodatne informacije (opciono)') }}
+            {{ form_widget(workoutForm.notes, {
+                'attr': {
+                    'rows': 4,
+                    'placeholder': 'Npr. pauza 60 sekundi izmedju serija...'
+                    }
+                }) 
+            }}
+            {{ form_errors(workoutForm.notes) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-2">Sačuvaj Vežbu</button>
+
+    {{ form_end(workoutForm) }}
+</div>
+{% endblock %}

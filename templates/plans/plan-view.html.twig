@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pregled plana: {{ plan.planName }}{% endblock %}
+
+{% block body %}
+    <div class="plan-view-container">
+        
+        <div class="flex-between" style="align-items: flex-start; margin-bottom: 2rem;">
+            <div>
+                <h1 class="auth-title" style="margin-bottom: 0.5rem;">{{ plan.planName }}</h1>
+                {% if plan.notes %}
+                    <p class="text-muted">{{ plan.notes }}</p>
+                {% endif %}
+            </div>
+            <a href="{{ path('app_plans_view') }}" class="btn btn-outline">Nazad na listu planova</a>
+        </div>
+
+        <div class="accordion-wrapper">
+            {% set dani_mape = {
+                'Monday': 'Ponedeljak', 'Tuesday': 'Utorak', 'Wednesday': 'Sreda', 
+                'Thursday': 'Četvrtak', 'Friday': 'Petak', 'Saturday': 'Subota', 'Sunday': 'Nedelja'
+            } %}
+
+            {% for day_eng, day_srb in dani_mape %}
+                <details class="day-accordion" {% if loop.first %}open{% endif %}>
+                    <summary>{{ day_srb }}</summary>
+                    
+                    <div class="accordion-content">
+                        
+                        <div class="plan-section">
+                            <h3>Vežbe</h3>
+                            {% set workout_plans_for_day = plan.workoutPlans|filter(wp => wp.day.value|lower == day_eng|lower) %}
+                            
+                            {% if workout_plans_for_day is not empty %}
+                                <div class="grid grid-2">
+                                    {% for workout_plan in workout_plans_for_day %}
+                                        {% include 'plans/_components/workout_plan_card.html.twig' with {'workout_plan': workout_plan} %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {% include 'plans/_components/empty_plan.html.twig' with {
+                                    'day_srb': day_srb,
+                                    'entity_name': 'plana vežbi',
+                                    'add_path': path('app_create_workout_plan_params', {'id': plan.id, 'day': day_eng|lower})
+                                } %}
+                            {% endif %}
+                        </div>
+
+                        <hr style="border-color: var(--color-border); margin: 2rem 0;">
+
+                        <div class="plan-section">
+                            <h3>Obroci</h3>
+                            {% set meal_plans_for_day = plan.mealPlans|filter(mp => mp.day.value|lower == day_eng|lower) %}
+
+                            {% if meal_plans_for_day is not empty %}
+                                <div class="grid grid-2">
+                                    {% for meal_plan in meal_plans_for_day %}
+                                        {% include 'plans/_components/meal_plan_card.html.twig' with {'meal_plan': meal_plan} %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {% include 'plans/_components/empty_plan.html.twig' with {
+                                    'day_srb': day_srb,
+                                    'entity_name': 'plana ishrane',
+                                    'add_path': path('app_create_meal_plan', {'id': plan.id, 'day': day_eng|lower})
+                                } %}
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </details>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

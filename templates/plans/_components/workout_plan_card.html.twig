@@ -1,0 +1,21 @@
+
+
+<div class="card">
+    <div class="flex-between">
+        <h4>Rutina vežbi</h4>
+        <form method="post"
+              action="{{ path('app_del_wp', {'id': workout_plan.id}) }}"
+              onsubmit="return confirm('Da li ste sigurni da želite da obrišete ovu rutinu vežbi?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ workout_plan.id) }}">
+            <button class="btn btn-delete" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Obriši</button>
+        </form>
+    </div>
+
+    <ul style="list-style-position: inside; margin-top: 0.5rem; padding-left: 0.5rem;">
+        {% for workout in workout_plan.workouts %}
+            <li>{{ workout.name }} ({{ workout.sets }} serija x {{ workout.reps }} ponavljanja)</li>
+        {% else %}
+            <li>Nema definisanih vežbi.</li>
+        {% endfor %}
+    </ul>
+</div>

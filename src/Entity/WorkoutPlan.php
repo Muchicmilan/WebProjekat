@@ -19,7 +19,7 @@ class WorkoutPlan
     #[ORM\Column(type:"string", length: 25 ,enumType: DayOfWeek::class)]
         private ?DayOfWeek $day = null;
 
-    #[ORM\ManyToMany(targetEntity: Workout::class, inversedBy: "workoutPlans")]
+    #[ORM\ManyToMany(targetEntity: Workout::class, inversedBy: "workoutPlans", cascade:['persist'])]
     private Collection $workouts; 
     
     #[ORM\ManyToOne(targetEntity: Plan::class)]
@@ -65,7 +65,7 @@ class WorkoutPlan
         return $this->plan;
     }
 
-    public function setPlan(Plan $plan):static {
+    public function setPlan(?Plan $plan):static {
         $this->plan = $plan;
         return $this;
     }

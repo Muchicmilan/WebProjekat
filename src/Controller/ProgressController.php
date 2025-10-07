@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Enums\UserRole;
+use App\Form\ProgressType;
 use App\Form\WeightType;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,8 +14,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\UserProgress;
 use App\Entity\User;
-#[Route('/weight')]
-final class WeightController extends AbstractController
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+#[Route('/progress')]
+final class ProgressController extends AbstractController
 {   
     #[Route('-first-register', 'app_weight_first_time')]
     public function weightRegister(Request $request,UserPasswordHasherInterface $userPasswordHasher ,EntityManagerInterface $entityManager): Response {
@@ -28,7 +30,7 @@ final class WeightController extends AbstractController
         }
 
 
-        $form = $this->createForm(WeightType::class);
+        $form = $this->createForm(ProgressType::class);
         $form->handleRequest($request);
 
 
@@ -61,6 +63,43 @@ final class WeightController extends AbstractController
         
         return $this->render('weight/index.html.twig', [
             'weightForm' => $form,
+        ]);
+    }
+
+    #[Route('personal-view' , name: 'app_pers_prog_view')]
+    #[IsGranted('ROLE_USER')]
+    public function viewPersonalProgress(EntityManagerInterface $em) {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        if(!$user)
+            $this->redirect('app_login');
+        $usersProgress = $em
+            ->getRepository(UserProgress::class)
+            ->findBy(['user' => $user],['date' => 'DESC']);
+        return $this->render('users/user_personal_progress.html.twig', [
+            'user' => $user,
+            'progress' => $usersProgress
+        ]);
+    }
+
+    #[Route('update-progress' , name: 'app_pers_prog_upd')]
+    #[IsGranted('ROLE_USER')]
+    public function updateProgress(EntityManagerInterface $em, Request $req) {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $userProgress = new UserProgress();
+        $form = $this->createForm(ProgressType::class, $userProgress);
+        $form->handleRequest($req);
+        if($form->isSubmitted() && $form->isValid()) {
+            $userProgress->setDate(new DateTime());
+            $userProgress->setUser($user);
+            $em->persist($userProgress);
+            $em->flush();
+
+            return $this->redirectToRoute('app_pers_prog_view');
+        }
+        return $this->render('weight/index.html.twig', [
+            'weightForm' => $form 
         ]);
     }
 }

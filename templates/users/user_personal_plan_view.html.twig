@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pregled Plana: {{ plan.planName }}{% endblock %}
+
+{% block body %}
+    <div>
+        <h1 class="auth-title">{{ plan.planName }}</h1>
+        {% if plan.notes %}
+            <p class="text-muted">{{ plan.notes }}</p>
+        {% endif %}
+    </div>
+
+    <div class="accordion-wrapper" style="margin-top: 2rem;">
+        {% set dani_mape = {
+            'Monday': 'Ponedeljak', 'Tuesday': 'Utorak', 'Wednesday': 'Sreda', 
+            'Thursday': 'Četvrtak', 'Friday': 'Petak', 'Saturday': 'Subota', 'Sunday': 'Nedelja'
+        } %}
+
+        {% for day_eng, day_srb in dani_mape %}
+            {% set workout_plan_for_day = plan.workoutPlans|filter(wp => wp.day.value|lower == day_eng|lower)|first %}
+            {% set meal_plan_for_day = plan.mealPlans|filter(mp => mp.day.value|lower == day_eng|lower)|first %}
+
+            <details class="day-accordion" {% if loop.first %}open{% endif %}>
+                <summary>{{ day_srb }}</summary>
+                
+                <div class="accordion-content">
+                    
+                    <div class="plan-section">
+                        <h3>Trening</h3>
+                        {% if workout_plan_for_day and workout_plan_for_day.workouts is not empty %}
+                            <div class="grid grid-2">
+                                {% for workout in workout_plan_for_day.workouts %}
+                                    <div class="card">
+                                        <h4>{{ workout.name }}</h4>
+                                        <p class="text-muted" style="margin-top: 0.5rem;">{{ workout.sets }} serija x {{ workout.reps }} ponavljanja</p>
+                                        {% if workout.notes %}
+                                            <p class="text-muted" style="font-size: 0.9rem; margin-top: 0.5rem; border-top: 1px solid var(--color-border); padding-top: 0.5rem;">
+                                                <em>Napomena: {{ workout.notes }}</em>
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="empty-state-card">
+                                <p>Nema treninga za ovaj dan.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <hr style="border-color: var(--color-border); margin: 2rem 0;">
+
+                    <div class="plan-section">
+                        <h3>Ishrana</h3>
+                        {% if meal_plan_for_day and meal_plan_for_day.meals is not empty %}
+                            <div class="grid grid-2">
+                                {% for meal in meal_plan_for_day.meals %}
+                                    <div class="card">
+                                        <h4>{{ meal.name }}</h4>
+                                        <dl class="nutrition-grid">
+                                            <div class="nutrition-item">
+                                                <dt>Kalorije</dt>
+                                                <dd>{{ meal.caloriesKcal|number_format(0) }}</dd>
+                                            </div>
+                                            <div class="nutrition-item">
+                                                <dt>Proteini</dt>
+                                                <dd>{{ meal.proteinG|number_format(1) }}g</dd>
+                                            </div>
+                                            <div class="nutrition-item">
+                                                <dt>Uglj. Hidrati</dt>
+                                                <dd>{{ meal.carbsG|number_format(1) }}g</dd>
+                                            </div>
+                                            <div class="nutrition-item">
+                                                <dt>Masti</dt>
+                                                <dd>{{ meal.fatG|number_format(1) }}g</dd>
+                                            </div>
+                                        </dl>
+                                        {% if meal.recipe %}
+                                            <details class="recipe-details">
+                                                <summary>Prikaži recept</summary>
+                                                <p>{{ meal.recipe }}</p>
+                                            </details>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="empty-state-card">
+                                <p>Nema plana ishrane za ovaj dan.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </details>
+        {% endfor %}
+    </div>
+{% endblock %}

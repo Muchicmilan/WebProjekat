@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Entity\Enums\UserRole;
-
+//Klasa iskljucivo za read funkcije planova
 class PlanManagementController extends AbstractController {
     #[Route('/manage-plans',name: 'app_plans_view')]
     #[IsGranted(
@@ -42,6 +42,40 @@ class PlanManagementController extends AbstractController {
         $plan = $planRepository->findWithDetails($id);  
         return $this->render('plans/plan-view.html.twig', [
             'plan' => $plan,
+        ]);
+    }
+
+    #[Route('/my-plans}',name: 'app_user_plans')]
+    #[IsGranted('ROLE_USER')]
+    public function userPlan(): Response {
+        /**
+         * @var \App\Entity\User $user
+         */
+        $user = $this->getUser();
+
+        if(!$user)
+            return $this->redirect('app_login');
+
+        $plans = $user->getPlans();
+
+        return $this->render('users/user_personal_plans.html.twig', [
+            'plans' => $plans
+        ]);
+
+    }
+    #[Route('/view-plan/{id}', name: 'app_plan_view')]
+    #[IsGranted('ROLE_USER')]
+    public function viewPersonalPlan(Plan $plan) {
+                /**
+         * @var \App\Entity\User $user
+         */
+        $user = $this->getUser();
+        if(!$user->getPlans()->contains($plan) && !$user->getRole() !== UserRole::TRAINER){
+            throw $this->createAccessDeniedException('Nemate pristup ovom planu.');
+        }
+
+        return $this->render('users/user_personal_plan_view.html.twig', [
+            'plan' => $plan
         ]);
     }
 

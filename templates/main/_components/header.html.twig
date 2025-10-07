@@ -11,8 +11,8 @@
                     <a href="{{ path('app_users_trainer_view') }}">Pregled korisnika</a>
                     <a href="{{ path('app_plans_view') }}">Upravljaj Planovima</a>
                 {% else %}
-                    <a href="#">Moj Napredak</a>
-                    <a href="#">Moji Planovi</a>
+                    <a href="{{ path('app_pers_prog_view')}}">Moj Napredak</a>
+                    <a href="{{ path('app_user_plans')}}">Moji Planovi</a>
                 {% endif %}
             </nav>
         {% endif %}

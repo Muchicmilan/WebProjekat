@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
 use Symfony\Component\Validator\Constraints\Type;
 
-class WeightType extends AbstractType
+class ProgressType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

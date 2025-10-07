@@ -10,7 +10,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
+//Klasa bazirana na write funkcije vezano za planove
 class MainPlanController extends AbstractController{
     #[Route('/manage-plans/create-main-plan', name:'app_plan_create')]
     #[IsGranted(

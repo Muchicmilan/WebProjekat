@@ -17,6 +17,7 @@
 @import url('DayCards.css');
 @import url('DayBadges.css');
 @import url('Profile.css');
+@import url('PersonalPlanView.css');
 * {
   box-sizing: border-box;
   margin: 0;
@@ -41,7 +42,6 @@ main {
   flex: 1;
   padding: 2rem;
 }
-/*Form errori*/
 .form-group ul {
   list-style: none;
   margin: 0.4rem 0 0 0;

@@ -1,0 +1,49 @@
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.nutrition-item {
+  text-align: center;
+}
+
+.nutrition-item dt {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nutrition-item dd {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-left: 0;
+}
+
+.recipe-details {
+  margin-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 1rem;
+}
+
+.recipe-details summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.recipe-details[open] summary {
+  color: var(--color-accent);
+}
+
+.recipe-details p {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--color-border);
+  white-space: pre-wrap;
+}

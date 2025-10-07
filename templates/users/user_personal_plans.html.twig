@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Moji Planovi{% endblock %}
+
+{% block body %}
+    <h1 class="auth-title">Moji Dodeljeni Planovi</h1>
+
+    {% if plans is not empty %}
+        <div class="grid grid-3 mt-3">
+            {% for plan in plans %}
+                <a href="{{ path('app_plan_view', {'id': plan.id}) }}" class="card" style="text-decoration: none;">
+                    <h3>{{ plan.planName }}</h3>
+                    {% if plan.notes %}
+                        <p class="text-muted">{{ plan.notes|slice(0, 100) ~ '...' }}</p>
+                    {% else %}
+                        <p class="text-muted">Nema dodatnih napomena za ovaj plan.</p>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card text-center mt-3">
+            <p class="text-muted">Trenutno vam nije dodeljen nijedan plan. Molimo vas, kontaktirajte svog trenera.</p>
+        </div>
+    {% endif %}
+{% endblock %}

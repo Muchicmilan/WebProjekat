@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Plan: {{ plan.planName }}</title>
+<style>
+@page { margin: 20mm 15mm; }
+body { font-family: DejaVu Sans, sans-serif; font-size: 11px; color: #333; }
+h1, h2, h3, h4, h5 { font-weight: normal; }
+h1 { text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; font-size: 24px; }
+h2 { background-color: #f2f2f2; padding: 10px; border-left: 4px solid #007bff; margin-top: 30px; font-size: 20px; }
+h3 { border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; font-size: 16px; }
+h4 { font-size: 14px; font-weight: bold; margin-top: 0; margin-bottom: 10px; }
+h5 { font-size: 12px; font-weight: bold; margin-bottom: 5px; }
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }
+th { background-color: #f9f9f9; }
+.plan-header { margin-bottom: 30px; padding: 15px; border: 1px solid #eee; background-color: #fafafa; }
+.notes { margin-top: 20px; padding: 15px; background-color: #fffbe6; border: 1px solid #ffe58f; white-space: pre-wrap; }
+.day-container { page-break-before: always; }
+.day-container:first-of-type { page-break-before: auto; }
+.no-plan { color: #888; font-style: italic; }
+.meal-item { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed #ccc; }
+.meal-item:last-child { border-bottom: none; }
+.nutrition-table { width: auto; margin-bottom: 10px; }
+.nutrition-table td { border: none; padding: 2px 8px 2px 0; }
+.recipe { padding-left: 10px; border-left: 3px solid #eee; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+
+    <h1>Plan Treninga i Ishrane: {{ plan.planName }}</h1>
+
+    <div class="plan-header">
+        <p><strong>Datum štampe:</strong> {{ datum_stampanja|date('d.m.Y H:i') }}</p>
+    </div>
+
+    {% if plan.notes %}
+        <div class="notes">
+            <h3>Napomene za plan:</h3>
+            <p>{{ plan.notes }}</p>
+        </div>
+    {% endif %}
+
+    {% set dani_mape = {
+        'Monday': 'Ponedeljak', 'Tuesday': 'Utorak', 'Wednesday': 'Sreda', 
+        'Thursday': 'Četvrtak', 'Friday': 'Petak', 'Saturday': 'Subota', 'Sunday': 'Nedelja'
+    } %}
+
+    {% for day_eng, day_srb in dani_mape %}
+        
+        {% set workout_plans_for_day = plan.workoutPlans|filter(wp => wp.day.value|lower == day_eng|lower) %}
+        {% set meal_plans_for_day = plan.mealPlans|filter(mp => mp.day.value|lower == day_eng|lower) %}
+
+        {% if workout_plans_for_day is not empty or meal_plans_for_day is not empty %}
+            <div class="day-container">
+                <h2>{{ day_srb }}</h2>
+
+                <h3>Trening</h3>
+                {% if workout_plans_for_day is not empty %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Vežba</th>
+                                <th>Serije</th>
+                                <th>Ponavljanja</th>
+                                <th>Napomena</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for workout_plan in workout_plans_for_day %}
+                                {% for workout in workout_plan.workouts %}
+                                    <tr>
+                                        <td>{{ workout.name | default('N/A') }}</td>
+                                        <td>{{ workout.sets | default('N/A') }}</td>
+                                        <td>{{ workout.reps | default('N/A') }}</td>
+                                        <td>{{ workout.notes | default('') }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="no-plan">Dan za odmor.</p>
+                {% endif %}
+                <h3>Ishrana</h3>
+                {% if meal_plans_for_day is not empty %}
+                    {% for meal_plan in meal_plans_for_day %}
+                        {% for meal in meal_plan.meals %}
+                            <div class="meal-item">
+                                <h4>{{ meal.name }}</h4>
+                                <table class="nutrition-table">
+                                    <tr>
+                                        <td><strong>Kalorije:</strong></td>
+                                        <td>{{ meal.caloriesKcal | number_format(2, ',', '.') }} kcal</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Proteini:</strong></td>
+                                        <td>{{ meal.proteinG | number_format(2, ',', '.') }} g</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Ugljeni hidrati:</strong></td>
+                                        <td>{{ meal.carbsG | number_format(2, ',', '.') }} g</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Masti:</strong></td>
+                                        <td>{{ meal.fatG | number_format(2, ',', '.') }} g</td>
+                                    </tr>
+                                </table>
+                                {% if meal.recipe %}
+                                    <h5>Recept:</h5>
+                                    <div class="recipe"><p>{{ meal.recipe }}</p></div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    <p class="no-plan">Nema definisanog plana ishrane za ovaj dan.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+</body>
+</html>

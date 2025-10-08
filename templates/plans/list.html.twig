@@ -26,7 +26,7 @@
                         <td>{{ plan.notes ? (plan.notes|slice(0, 70) ~ (plan.notes|length > 70 ? '...' : '')) : 'N/A' }}</td>
                         <td>
                             <div class="table-actions">
-                               <a style="text-decoration: none" href="{{ path('app_plan_view', {'id': plan.id}) }}" class="btn btn-outline">
+                               <a style="text-decoration: none" href="{{ path('app_plan_view_details', {'id': plan.id}) }}" class="btn btn-outline">
                                     Pregled
                                 </a>
                                 <form method="post"

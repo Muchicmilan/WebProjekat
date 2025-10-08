@@ -3,17 +3,25 @@
 namespace App\Controller;
 
 use App\Entity\Enums\UserRole;
+use App\Entity\Plan;
 use App\Entity\User;
 use App\Entity\UserProgress;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 #[Route('/reports')]
 class ReportsController extends AbstractController {
+
+
     #[Route('/users/spreadsheet', 'app_users_spreadsheet')]
     #[IsGranted('ROLE_ADMIN')]
     public function userSpreadSheet(EntityManagerInterface $em) {
@@ -100,6 +108,46 @@ class ReportsController extends AbstractController {
         $response->headers->set('Cache-Control', 'max-age=0');
         return $response;
     }
+    //za pdf koristim knp-snappy-bundle, omogucava definisanje pdf objekta koji moze napraviti pdf
+    //dokument koristeci html
+    #[Route('/plan/{id}/pdf', 'app_plan_pdf')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function planPdf(Plan $plan) {
+        $plan->getWorkoutPlans()->count(); 
+        $plan->getMealPlans()->count();
+
+        foreach ($plan->getWorkoutPlans() as $wp) {
+            $wp->getWorkouts()->count();
+        }
+        foreach ($plan->getMealPlans() as $mp) {
+            $mp->getMeals()->count();
+        }
+        $pdfOpts = new Options();
+        //Vazno kako bi dompdf ucitao css
+        $pdfOpts->set('isRemoteEnabled', true);
+        $pdfOpts->set('isHtml5ParseEnabled', true);
+        $domPdf = new Dompdf($pdfOpts);
+        $date = new DateTime();
+        $dateString = $date->format('d/m/Y');
+        $html = $this->render('pdf/plan_to_pdf.html.twig', [
+            'plan' => $plan,
+            'datum_stampanja' => $date
+        ]);
+
+        $domPdf->loadHtml($html);
+        $domPdf->setPaper('A4', 'Portrait');
+        $domPdf->render();
+        $filename = '"izvestaj_plana_'.$plan->getPlanName().'_'.$dateString.'.pdf"';
+        
+        $domPdf->stream($filename, [
+            'Attachment' => true //Kako bi browser automatski skinuo
+        ]);
+
+        return new Response('', 200, [
+            'Content-Type' => 'Application/pdf'
+            //Nema potrebe za Content-Disposition jer smo taj header resili sa dompdf streamom
+        ]);
+    } 
 }
 
 ?>

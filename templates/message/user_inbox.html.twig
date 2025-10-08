@@ -24,12 +24,6 @@
                         <p style="white-space: pre-wrap; color: var(--color-text); margin-bottom: 1.5rem;">
                             {{ message.content }}
                         </p>
-                        
-                        <div class="message-actions" style="text-align: right; border-top: 1px solid var(--color-border); padding-top: 1rem;">
-                            <a class="btn btn-outline btn-sm" href="{{ path('app_message_send', {'replyTo': message.sender.email}) }}">
-                                 Odgovori
-                            </a>
-                        </div>
                     </div>
                 </details>
             {% endfor %}

@@ -65,6 +65,9 @@
             {% if ( is_granted('ROLE_TRAINER') or is_granted('ROLE_ADMIN') )%}
             <a href="{{ path('app_assign_plan', {'id' : user.id})}}" class="btn btn-primary">Dodeli plan</a>
             {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a class="btn btn-primary" href="{{ path('app_progress_spreadsheet', {'id': user.id}) }}">Excel izvestaj</a>
+            {% endif %}
         </div>
         <div class="plan-list">
             {% for plan in user.plans %}

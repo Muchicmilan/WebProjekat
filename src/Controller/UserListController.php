@@ -10,9 +10,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
+//Klasa vezana samo za read funkcije user entiteta
 class UserListController extends AbstractController
 {
     private $logger;
@@ -36,11 +37,11 @@ class UserListController extends AbstractController
 
     #[Route(path: '/assign-plan', name: 'app_users_trainer_view')]
     #[IsGranted(new Expression('is_granted("ROLE_TRAINER") or is_granted("ROLE_ADMIN")'))]
-    public function listUsersForTrainer(EntityManagerInterface $em)
+    public function listUsersForTrainer(Request $req, UserRepository $userRepo)
     {
         $this->logger->info('Trener/Admin {user} pregleda listu korisnika za dodelu plana.', ['user' => $this->getUser()->getUserIdentifier()]);
-        $userRepo = $em->getRepository(User::class);
-        $allUsers = $userRepo->findBy(['role' => UserRole::USER]);
+        $searchTerm = $req->query->get('q');
+        $allUsers = $userRepo->findUserSearch($searchTerm);
         return $this->render('users/user_plan_list.html.twig', [
             'all_users' => $allUsers
         ]);

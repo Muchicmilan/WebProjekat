@@ -28,6 +28,18 @@ class UserRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findUserSearch(?string $searchTerm) {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.role = :role ')
+            ->setParameter('role', UserRole::USER)
+            ->orderBy('u.email', 'ASC');
+        if($searchTerm) {
+            $qb->andWhere('u.name LIKE :searchTerm OR u.surname LIKE :searchTerm OR u.email LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

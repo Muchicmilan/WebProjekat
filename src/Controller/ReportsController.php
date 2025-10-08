@@ -64,7 +64,7 @@ class ReportsController extends AbstractController {
 
         return $response;
     }
-    #[Route('/user/{id}/spreadsheet', 'app_users_spreadsheet')]
+    #[Route('/user/{id}/spreadsheet', 'app_progress_spreadsheet')]
     #[IsGranted('ROLE_ADMIN')]
     public function userProgressSpreadSheet(User $user, EntityManagerInterface $em) {
         if($user->getRole() !== UserRole::USER) {
@@ -102,7 +102,7 @@ class ReportsController extends AbstractController {
             $writer->save('php://output');
         });
 
-        $filename = sprintf('izvestaj_korisnickog_napredka.xlsx', date('d-m-Y'));
+        $filename = sprintf('izvestaj_korisnickog_napredka_'. $user->getName() .'_'. $user->getSurname() .'.xlsx', date('d-m-Y'));
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $response->headers->set('Content-Disposition', 'attachment;filename="' . $filename . '"');
         $response->headers->set('Cache-Control', 'max-age=0');

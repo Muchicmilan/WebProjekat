@@ -35,6 +35,9 @@
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ plan.id) }}">
                                     <button class="btn btn-delete">Obriši</button>
                                 </form>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('app_plan_pdf', {'id': plan.id}) }}" class="btn btn-edit"> Skini PDF </a>
+                                {% endif %}
                             </div>
                         </td>
                     </tr>

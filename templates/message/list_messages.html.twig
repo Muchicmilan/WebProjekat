@@ -28,11 +28,13 @@
                     <div class="accordion-content">
                         <p style="white-space: pre-wrap; color: var(--color-text);">{{ message.content }}<br>
                         </p>
+                        {% if is_granted('ROLE_TRAINER') %}
                         <div class="message-actions" style="text-align: right; border-top: 1px solid var(--color-border); padding-top: 1rem;">
                             <a class="btn btn-outline btn-sm" href="{{ path('app_trainer_response', {'id' : message.sender.id}) }}">
                                  Odgovori
                             </a>
                         </div>
+                        {% endif %}
                     </div>
                 </details>
             {% endfor %}

@@ -2,6 +2,9 @@
 {% block title  %} Korisnici {% endblock title %}
 {% block body %}
 {% if is_granted('ROLE_ADMIN') %}
+    <div class="card mt-3">
+        <a class="btn btn-primary" href="{{ path('app_users_spreadsheet')}}"> Excel Izvestaj </a>
+    <div>
     <div class="table-container">
         <table>
             <tr>
@@ -40,9 +43,10 @@
                             onsubmit="return confirm('Da li ste sigurni da zelite smanjiti poziciju korisnika sa e-mailom: {{user.email}}');"
                             >
                                 <input type="hidden" name="_token" value="{{ csrf_token('demote' ~ user.id) }}">
-                                <button class="btn btn-edit">Degradisi</button>
+                                <button class="btn btn-edit">Smanji polozaj</button>
                             </form>
                             {% endif %}
+                            <a class="btn btn-edit" href="{{ path('app_user_profile' , {'id': user.id}) }}">Profil<a>
                         </div>
                     </td>
                 </tr>

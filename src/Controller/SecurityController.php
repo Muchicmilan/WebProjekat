@@ -22,7 +22,7 @@ class SecurityController extends AbstractController
     {
         if ($this->getUser()) {
             $this->logger->info('Već ulogovan korisnik {user} je pristupio stranici za prijavu.', ['user' => $this->getUser()->getUserIdentifier()]);
-            return $this->redirect('app_homepage');
+            return $this->redirectToRoute('app_homepage');
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();

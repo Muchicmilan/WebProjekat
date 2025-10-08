@@ -28,6 +28,8 @@ final class ProgressController extends AbstractController
     #[Route('-first-register', 'app_weight_first_time')]
     public function weightRegister(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if($this->getUser())
+            $this->redirectToRoute('app_homepage');
         $registrationData = $request->getSession()->get('registration_data');
         $hashedPassword = $request->getSession()->get('hashed_password');
 
@@ -67,7 +69,7 @@ final class ProgressController extends AbstractController
             $request->getSession()->remove('registration_data');
             $request->getSession()->remove('hashed_password');
 
-            return $this->redirectToRoute('app_homepage');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('weight/index.html.twig', [

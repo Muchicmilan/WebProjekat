@@ -2,6 +2,21 @@
 {% block title  %} Korisnici {% endblock title %}
 {% block body %}
 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TRAINER') %}
+    <div class="search-container" style="margin-bottom: 1.5rem; max-width: 500px;">
+        <form action="{{ path('app_users_trainer_view') }}" method="get" class="auth-form">
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <div class="form-group" style="flex-grow: 1; margin-bottom: 0;">
+                    <input 
+                        type="text" 
+                        name="q" 
+                        placeholder="Pretraži po imenu, prezimenu, email-u..." 
+                        value="{{ app.request.query.get('q') }}"
+                    >
+                </div>
+                <button type="submit" class="btn btn-primary">Pretraži</button>
+            </div>
+        </form>
+    </div>
     <div class="table-container">
         <table>
             <tr>

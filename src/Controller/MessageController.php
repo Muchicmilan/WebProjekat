@@ -132,8 +132,12 @@ class MessageController extends AbstractController {
 
         $msg = new MessageRequest();
         $form = $this->createForm(MessageRequestType::class);
+
+        if(!$form->isSubmitted()) {
+            $form->get('email')->setData($user->getEmail());
+        }
+        
         $form->handleRequest($request);
-        $form->get('email')->setData($user->getEmail());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $msg->setDateSent(new DateTimeImmutable());

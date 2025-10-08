@@ -14,6 +14,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 //Klasa bazirana na write funkcije vezano za planove
 class MainPlanController extends AbstractController{
 
+    //Logger iz simfonijevog logger bundle-a omogucava instanciranje klase koja ispisuje u fajlu nase
+    //custom logove
     private $logger;
 
     public function __construct(LoggerInterface $li) {
@@ -21,7 +23,10 @@ class MainPlanController extends AbstractController{
     }
 
     #[Route('/manage-plans/create-main-plan', name:'app_plan_create')]
+    //Isgranted atribut nam omogucava da obezbedimo rute, tako da samo odredjeni korisnici mogu pristupiti datu rutu
     #[IsGranted(
+        //Expression language nam omogucava u ovoj situaciji da proverimo dal neko poseduje jedan od 2 rola
+        //Jer samo sa isGranted mozemo and operator za rolove da koristimo
         new Expression(
             'is_granted("ROLE_TRAINER") or ' .
             'is_granted("ROLE_ADMIN")'
@@ -31,14 +36,21 @@ class MainPlanController extends AbstractController{
         /**
          * @var \App\Entity\User $user
          */
+
+        //Deklarisemo $user promenljivu kao EntityUser
+        //To nam omogucava da kad fetchujemo trenutnog usera preko kontrolera dobijemo odgovarajuci entitet
         $user = $this->getUser();
         $this->logger->info($user->getRole()->value . ' ' . $user->getName() .' '. $user->getSurname() .
          " Pokusava da kreira glavni plan");
         $plan = new Plan();
+        //Kreiranje forme metodom iz abstraktnog controllera omogucava nam da naglasimo kako treba forma izgledati
+        //Koristeci AbstractType objekta kao i da dodelimo objekat ili promenljivu u kojoj se podaci upisuju
         $form = $this->createForm(PlanType::class, $plan);
+        //Ispituje prosledjen Request i pokrece metodu submit()
         $form->handleRequest($req);
         if($form->isSubmitted() && $form->isValid()) {
-            $em->persist($plan);
+            $em->persist($plan); //Ovde koristimo EntityManagerInterface kako bi mogli lakse
+            //Komunicirati sa bazom, persist() salje objekte u redu, flush() vrsi upite koji upisuje objekte
             $em->flush();
         $this->logger->info($plan->getPlanName() . " sa id-em: " . $plan->getId() . " Je uspesno kreiran");
 

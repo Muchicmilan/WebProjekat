@@ -41,7 +41,7 @@ class WorkoutPlanController extends AbstractController{
             $em->persist($workoutPlan);
             $em->flush();
 
-            return $this->redirectToRoute('app_plan_view', ['id' => $plan->getId()]);
+            return $this->redirectToRoute('app_plan_view_details', ['id' => $plan->getId()]);
         }
 
         return $this->render('plans/create-workout-plan.html.twig', [

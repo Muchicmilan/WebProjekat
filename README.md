@@ -1,6 +1,4 @@
-Projekat – Web Programiranje
-
-Tehnologije:
+Projekat - Web Programiranje
 
 Symfony 7.3
 
